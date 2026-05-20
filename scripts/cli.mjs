@@ -3,26 +3,32 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { getConfig, writeGeneratedFacts } from './generate-facts.mjs'
 
+// 解析当前脚本所在目录，后续统一用它来定位 config/docs/generated 等相对路径
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const rootDir = path.resolve(__dirname, '..')
 
+// 读取 JSON 配置或生成结果
 function readJson(filePath) {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'))
 }
 
+// 读取普通文本文件
 function readText(filePath) {
   return fs.readFileSync(filePath, 'utf8')
 }
 
+// 写入文本文件，主要用于生成 handbook / edit guide
 function writeText(filePath, text) {
   fs.writeFileSync(filePath, text, 'utf8')
 }
 
+// 判断文件是否已存在，避免首次执行 ask/docs 时缺少 generated 文件
 function fileExists(filePath) {
   return fs.existsSync(filePath)
 }
 
+// 加载第一阶段生成的事实层 JSON；如果还没生成，则先触发一次 scan
 function loadFacts() {
   const config = getConfig()
   const generatedDir = path.resolve(rootDir, config.outputDir)
@@ -34,6 +40,7 @@ function loadFacts() {
   return readJson(factsPath)
 }
 
+// 根据 facts 和已有文档，拼装出更适合直接阅读的 handbook / edit guide
 function buildDocs() {
   const facts = loadFacts()
   const config = getConfig()
@@ -126,10 +133,12 @@ Recommended order:
   return { facts, generatedDir }
 }
 
+// 简单关键词命中工具，用来做问题分类和业务域识别
 function hasAny(text, keywords) {
   return keywords.some(keyword => text.includes(keyword))
 }
 
+// 将用户问题归类到几个固定入口，决定后续 answerQuestion 走哪一套模板
 function detectType(question) {
   const q = question.toLowerCase()
   if (hasAny(q, ['学习', '新人', '第一天', '路线', '路径', '计划', 'onboarding'])) return 'learning'
@@ -139,6 +148,7 @@ function detectType(question) {
   return 'overview'
 }
 
+// 从 facts.businessDomains 中粗粒度匹配用户提到的业务域，便于推荐页面/API 入口
 function detectDomain(question, facts) {
   const q = question.toLowerCase()
   const aliases = {
@@ -164,10 +174,16 @@ function detectDomain(question, facts) {
   return null
 }
 
+// 统一把 agent 项目内的文档路径转成绝对路径，便于命令行输出后可直接定位
 function formatDocPath(relativePath) {
   return path.join(rootDir, relativePath)
 }
 
+// ask 命令的核心入口：
+// 1. 读取 facts
+// 2. 判断问题类型
+// 3. 判断是否命中业务域
+// 4. 按模板返回“先看哪些文档/源码”
 function answerQuestion(question) {
   const facts = loadFacts()
   const config = getConfig()
@@ -187,6 +203,7 @@ function answerQuestion(question) {
   lines.push(`Question: ${question}`)
   lines.push('')
 
+  // 启动链路类问题：重点指向 main.ts / App.vue / layout
   if (type === 'startup') {
     lines.push(`结论：这个问题优先从应用启动链路看，入口是 \`src/main.ts\`，再经过 \`App.vue\` 和框架层注册。`)
     lines.push('')
@@ -198,6 +215,7 @@ function answerQuestion(question) {
     lines.push(`- ${path.join(repoPath, 'src/main.ts')}`)
     lines.push(`- ${path.join(repoPath, 'src/App.vue')}`)
     lines.push(`- ${path.join(repoPath, 'src/framework/layout/index.vue')}`)
+  // 路由类问题：重点指向 route.ts / router index / backend route mapping
   } else if (type === 'routing') {
     lines.push(`结论：这个项目的业务页面主要不是手写静态路由，而是登录后由后端菜单驱动动态初始化。`)
     lines.push('')
@@ -210,6 +228,7 @@ function answerQuestion(question) {
     lines.push(`- ${path.join(repoPath, 'src/framework/router/index.ts')}`)
     lines.push(`- ${path.join(repoPath, 'src/framework/router/backEnd.ts')}`)
     lines.push(`- ${path.join(repoPath, 'src/biz/route/index.ts')}`)
+  // 学习路径类问题：优先给阅读顺序，再补业务域入口
   } else if (type === 'learning') {
     lines.push(`结论：这个问题更适合按“框架心智模型 -> 典型业务链路 -> 改动入口”三段来学。`)
     lines.push('')
@@ -225,6 +244,7 @@ function answerQuestion(question) {
         lines.push(`- ${path.join(repoPath, 'src/biz/views', domain.domain, page, 'index.vue')}`)
       }
     }
+  // 改动入口类问题：优先建立“页面 -> modules -> API”这条修改链路
   } else if (type === 'edit') {
     lines.push(`结论：这类问题应该先找“页面主文件 -> modules 子组件 -> API 文件”的改动链路。`)
     lines.push('')
@@ -245,6 +265,7 @@ function answerQuestion(question) {
       lines.push('')
       lines.push(`如果还没有明确模块，先从目标页面的 \`index.vue\` 和对应 \`modules/\` 找入口。`)
     }
+  // 默认走项目总览类，帮助新人先建立 framework / biz 分层认知
   } else {
     lines.push(`结论：这是一个项目总览类问题，优先建立 \`framework\` 和 \`biz\` 的分层心智模型。`)
     lines.push('')
@@ -252,9 +273,10 @@ function answerQuestion(question) {
     for (const doc of commonDocs) {
       lines.push(`- ${doc}`)
     }
-    lines.push(`- ${formatDocPath('docs/newcomer-learning-path.md')}`)
+      lines.push(`- ${formatDocPath('docs/newcomer-learning-path.md')}`)
   }
 
+  // 如果识别到了具体业务域，再额外补一组页面/API 入口，减少二次检索成本
   if (domain && !['edit', 'learning'].includes(type)) {
     lines.push('')
     lines.push(`识别到业务域：\`${domain.domain}\``)
@@ -290,6 +312,7 @@ function answerQuestion(question) {
   return lines.join('\n')
 }
 
+// CLI 帮助信息
 function printHelp() {
   console.log(`voice-admin-web onboarding agent CLI
 
@@ -300,6 +323,7 @@ Usage:
 `)
 }
 
+// 命令分发入口：scan / docs / ask
 const command = process.argv[2]
 
 if (!command || ['-h', '--help', 'help'].includes(command)) {
@@ -307,18 +331,22 @@ if (!command || ['-h', '--help', 'help'].includes(command)) {
   process.exit(0)
 }
 
+// 重新扫描源项目，刷新 facts 和几个基础 generated 文档
 if (command === 'scan') {
   const { outputDir } = writeGeneratedFacts()
   console.log(`Generated onboarding facts in ${outputDir}`)
   process.exit(0)
 }
 
+// 基于已有 facts 生成 handbook 和 edit guide 这类更适合直接阅读的文档
 if (command === 'docs') {
   const { generatedDir } = buildDocs()
   console.log(`Generated onboarding docs in ${generatedDir}`)
   process.exit(0)
 }
 
+// 本地问答入口：
+// 当前版本不调用大模型，而是用规则把问题路由到合适的文档和源码入口
 if (command === 'ask') {
   const question = process.argv.slice(3).join(' ').trim()
   if (!question) {
