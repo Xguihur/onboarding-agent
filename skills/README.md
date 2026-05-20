@@ -1,13 +1,10 @@
-# Skills placeholder
+# Skills overview
 
-This directory is reserved for a later project-specific onboarding skill.
+This directory contains project-level skills for the onboarding agent.
 
-Suggested next step:
+## Available skills
 
-1. add a `frontend-onboarding/SKILL.md`,
-2. point it to the files under `generated/`,
-3. define answer rules for newcomers:
-   - prefer file paths,
-   - explain framework vs biz,
-   - say when something is uncertain,
-   - teach in "overall -> local -> edit entry" order.
+1. `frontend-onboarding/`
+   - the main newcomer-facing project skill,
+   - built for Codex / Claude Code / Cursor style runtimes,
+   - uses generated facts plus source code inspection.

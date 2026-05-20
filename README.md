@@ -1,6 +1,6 @@
 # voice-admin-web onboarding agent
 
-This project is the Phase 1 scaffold for a frontend onboarding agent focused on:
+This project is the Phase 1 + Phase 2 scaffold for a frontend onboarding agent focused on:
 
 1. understanding the `voice-admin-web` repo,
 2. generating onboarding-friendly project facts,
@@ -8,12 +8,13 @@ This project is the Phase 1 scaffold for a frontend onboarding agent focused on:
 
 ## Current scope
 
-Phase 1 does not try to be a full autonomous coding agent. It focuses on the fact layer:
+The current version does not try to be a full autonomous coding agent. It focuses on:
 
 1. project facts,
 2. startup and routing chain,
 3. module index,
-4. reusable scan script.
+4. reusable scan script,
+5. a project-specific onboarding skill for coding runtimes.
 
 ## Project layout
 
@@ -22,6 +23,8 @@ config/
   project.config.json        Agent target project config
 docs/
   how-to-use.md              How this scaffold is meant to be used
+  example-prompts.md         Example prompts for Codex / Claude Code / Cursor
+  newcomer-learning-path.md  Suggested 3-day reading path for newcomers
   phase-1-scope.md           What Phase 1 delivers
 generated/
   project-facts.json         Structured repo facts
@@ -31,7 +34,8 @@ generated/
 scripts/
   generate-facts.mjs         Repo analyzer for Phase 1
 skills/
-  README.md                  Placeholder for future project skill
+  README.md                  Skills overview
+  frontend-onboarding/       Project onboarding skill
 ```
 
 ## Commands
@@ -47,5 +51,5 @@ The default target repo is configured in [config/project.config.json](./config/p
 ## What to do next
 
 1. Keep refreshing the generated facts after important code changes.
-2. Add a project-specific onboarding skill in Phase 2/3.
-3. Hook this scaffold into Codex, Claude Code, or Cursor as a project-level agent package.
+2. Use the `frontend-onboarding` skill in Codex, Claude Code, or Cursor.
+3. Extend the skill with more domain-level walkthroughs in Phase 3.
