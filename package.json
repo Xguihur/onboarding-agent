@@ -1,0 +1,10 @@
+{
+  "name": "voice-admin-web-onboarding-agent",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Phase 1 onboarding agent scaffold for voice-admin-web",
+  "scripts": {
+    "scan": "node scripts/generate-facts.mjs"
+  }
+}

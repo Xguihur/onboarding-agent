@@ -1,0 +1,293 @@
+{
+  "generatedAt": "2026-05-20T08:26:12.880Z",
+  "projectName": "voice-admin-web",
+  "repoPath": "/Users/xiaolongxia/Desktop/shuoruan/project/voice-admin-web",
+  "stack": {
+    "framework": "Vue 3",
+    "language": "TypeScript",
+    "bundler": "Vite",
+    "state": "Pinia",
+    "router": "Vue Router 4",
+    "i18n": "Vue I18n",
+    "ui": [
+      "Element Plus",
+      "NutUI"
+    ]
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "alias": "/@ -> src/",
+  "entryFiles": [
+    "src/main.ts",
+    "src/App.vue",
+    "src/framework/router/route.ts",
+    "src/framework/router/index.ts",
+    "src/framework/router/backEnd.ts",
+    "src/biz/route/index.ts"
+  ],
+  "architecture": {
+    "frameworkDir": "src/framework",
+    "bizDir": "src/biz",
+    "description": "framework provides platform capabilities, biz provides business modules"
+  },
+  "counts": {
+    "bizDomains": 13,
+    "bizApiFiles": 35,
+    "frameworkApiFiles": 9,
+    "frameworkStoreFiles": 10,
+    "frameworkComponents": 12,
+    "frameworkHooks": 4
+  },
+  "startup": {
+    "usesPinia": true,
+    "usesRouter": true,
+    "usesGlobalComponents": true,
+    "usesI18n": true,
+    "initializesScreenSize": true,
+    "initializesSystemSetting": true
+  },
+  "routing": {
+    "hashHistory": true,
+    "hasRouterGuard": true,
+    "initializesBackendRoutes": true,
+    "usesBackendMenu": true,
+    "bizRoutesEmpty": true,
+    "notes": [
+      "login is static",
+      "main business routes are initialized after auth",
+      "backend menu maps to framework and biz views"
+    ]
+  },
+  "businessDomains": [
+    {
+      "domain": "approve",
+      "pageCount": 3,
+      "pages": [
+        "customer",
+        "deduction",
+        "unsubscribeapplication"
+      ],
+      "apiFiles": [
+        "src/biz/api/approve/customer.ts",
+        "src/biz/api/approve/deduction.ts",
+        "src/biz/api/approve/unsubscribeapplication.ts"
+      ]
+    },
+    {
+      "domain": "cardlibrary",
+      "pageCount": 3,
+      "pages": [
+        "complaint",
+        "customerGatewayManagement",
+        "list"
+      ],
+      "apiFiles": [
+        "src/biz/api/cardlibrary/callComplaint.ts",
+        "src/biz/api/cardlibrary/customerGatewayManagement.ts",
+        "src/biz/api/cardlibrary/list.ts"
+      ]
+    },
+    {
+      "domain": "customer",
+      "pageCount": 5,
+      "pages": [
+        "account",
+        "consumptionlist",
+        "list",
+        "menu",
+        "role"
+      ],
+      "apiFiles": [
+        "src/biz/api/customer/account.ts",
+        "src/biz/api/customer/list.ts",
+        "src/biz/api/customer/menu.ts",
+        "src/biz/api/customer/role.ts"
+      ]
+    },
+    {
+      "domain": "financial",
+      "pageCount": 4,
+      "pages": [
+        "credit",
+        "customer",
+        "deduction",
+        "warn"
+      ],
+      "apiFiles": [
+        "src/biz/api/financial/credit.ts",
+        "src/biz/api/financial/customer.ts",
+        "src/biz/api/financial/customerRefund.ts",
+        "src/biz/api/financial/deduction.ts",
+        "src/biz/api/financial/index.ts",
+        "src/biz/api/financial/invoice.ts",
+        "src/biz/api/financial/report.ts"
+      ]
+    },
+    {
+      "domain": "invoice",
+      "pageCount": 4,
+      "pages": [
+        "customerApplyForInvoicing",
+        "customerInvoiceAccount",
+        "customerInvoiceApply",
+        "partnerInvoicing"
+      ],
+      "apiFiles": [
+        "src/biz/api/financial/invoice.ts"
+      ]
+    },
+    {
+      "domain": "recharge",
+      "pageCount": 1,
+      "pages": [
+        "writeOffRecord"
+      ],
+      "apiFiles": [
+        "src/biz/api/recharge/writeOffRecord.ts"
+      ]
+    },
+    {
+      "domain": "reportStatistics",
+      "pageCount": 2,
+      "pages": [
+        "calleePddChart",
+        "orderFlowChart"
+      ],
+      "apiFiles": [
+        "src/biz/api/reportStatistics/calleePddChart.ts",
+        "src/biz/api/reportStatistics/orderFlowChart.ts"
+      ]
+    },
+    {
+      "domain": "rules",
+      "pageCount": 5,
+      "pages": [
+        "customer",
+        "customer-mediator",
+        "mediator",
+        "supplier",
+        "virtual-operator"
+      ],
+      "apiFiles": [
+        "src/biz/api/rules/app.ts",
+        "src/biz/api/rules/index.ts"
+      ]
+    },
+    {
+      "domain": "speech",
+      "pageCount": 1,
+      "pages": [
+        "filing"
+      ],
+      "apiFiles": [
+        "src/biz/api/speech/filing.ts"
+      ]
+    },
+    {
+      "domain": "supplier",
+      "pageCount": 3,
+      "pages": [
+        "paymentapproval",
+        "supplierlist",
+        "suppliermanagement"
+      ],
+      "apiFiles": [
+        "src/biz/api/supplier/paymentapproval.ts",
+        "src/biz/api/supplier/supplierlist.ts",
+        "src/biz/api/supplier/suppliermanage.ts"
+      ]
+    },
+    {
+      "domain": "supplierFinance",
+      "pageCount": 5,
+      "pages": [
+        "bill",
+        "billDetail",
+        "invoiceAccount",
+        "invoiceAccountDetail",
+        "invoiceApproval"
+      ],
+      "apiFiles": [
+        "src/biz/api/supplierFinance/bill.ts",
+        "src/biz/api/supplierFinance/supplierInvoice.ts"
+      ]
+    },
+    {
+      "domain": "vos",
+      "pageCount": 1,
+      "pages": [
+        "cdr"
+      ],
+      "apiFiles": [
+        "src/biz/api/vos/cdr.ts"
+      ]
+    },
+    {
+      "domain": "xnumber",
+      "pageCount": 2,
+      "pages": [
+        "xlist",
+        "xnumberlist"
+      ],
+      "apiFiles": [
+        "src/biz/api/xnumber/xlist.ts"
+      ]
+    }
+  ],
+  "apiOnlyDomains": [
+    "callmanagement",
+    "common"
+  ],
+  "framework": {
+    "components": [
+      "BatchInput",
+      "CityCascader",
+      "DatePicker",
+      "DictTag",
+      "DrawerTab",
+      "IconSelector",
+      "Pagination",
+      "Preview",
+      "SearchSet",
+      "SelectHttp",
+      "SvgIcon",
+      "Upload"
+    ],
+    "hooks": [
+      "dict",
+      "message",
+      "screenSize",
+      "table"
+    ],
+    "apiFiles": [
+      "src/framework/api/admin/login.ts",
+      "src/framework/api/admin/menu.ts",
+      "src/framework/api/share.ts",
+      "src/framework/api/system/dept.ts",
+      "src/framework/api/system/dict.ts",
+      "src/framework/api/system/menu.ts",
+      "src/framework/api/system/role.ts",
+      "src/framework/api/system/site.ts",
+      "src/framework/api/system/user.ts"
+    ],
+    "storeFiles": [
+      "src/framework/stores/dict.ts",
+      "src/framework/stores/fixedSetting.ts",
+      "src/framework/stores/index.ts",
+      "src/framework/stores/keepAliveNames.ts",
+      "src/framework/stores/requestOldRoutes.ts",
+      "src/framework/stores/routesList.ts",
+      "src/framework/stores/screenSize.ts",
+      "src/framework/stores/systemSetting.ts",
+      "src/framework/stores/tagsViewRoutes.ts",
+      "src/framework/stores/themeConfig.ts"
+    ]
+  },
+  "existingAiAssets": {
+    "hasProjectNavigatorSkill": true,
+    "projectNavigatorSkill": ".cursor/skills/project-navigator/SKILL.md"
+  }
+}
