@@ -23,6 +23,10 @@ function ensureDir(dirPath) {
   fs.mkdirSync(dirPath, { recursive: true })
 }
 
+function getConfig() {
+  return readJson(configPath)
+}
+
 function listDirs(dirPath) {
   if (!exists(dirPath)) return []
   return fs
@@ -117,7 +121,7 @@ function collectFrameworkHooks(repoPath) {
 }
 
 function buildFacts() {
-  const config = readJson(configPath)
+  const config = getConfig()
   const repoPath = config.sourceRepoPath
   const outputDir = path.resolve(rootDir, config.outputDir)
 
@@ -365,9 +369,18 @@ ${domainSections}
 
 const { facts, outputDir } = buildFacts()
 
-writeFile(path.join(outputDir, 'project-facts.json'), JSON.stringify(facts, null, 2))
-writeFile(path.join(outputDir, 'project-overview.md'), renderOverview(facts))
-writeFile(path.join(outputDir, 'startup-and-routing.md'), renderStartupAndRouting(facts))
-writeFile(path.join(outputDir, 'module-index.md'), renderModuleIndex(facts))
+export function writeGeneratedFacts() {
+  const { facts, outputDir } = buildFacts()
+  writeFile(path.join(outputDir, 'project-facts.json'), JSON.stringify(facts, null, 2))
+  writeFile(path.join(outputDir, 'project-overview.md'), renderOverview(facts))
+  writeFile(path.join(outputDir, 'startup-and-routing.md'), renderStartupAndRouting(facts))
+  writeFile(path.join(outputDir, 'module-index.md'), renderModuleIndex(facts))
+  return { facts, outputDir }
+}
 
-console.log(`Generated onboarding facts in ${outputDir}`)
+export { getConfig, readJson, readText, exists, ensureDir, listDirs, listFilesRecursive, toPosix, relativePosix }
+
+if (process.argv[1] && path.resolve(process.argv[1]) === __filename) {
+  const { outputDir } = writeGeneratedFacts()
+  console.log(`Generated onboarding facts in ${outputDir}`)
+}

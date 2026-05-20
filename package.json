@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Phase 1 onboarding agent scaffold for voice-admin-web",
+  "description": "Phase 3 onboarding agent scaffold for voice-admin-web",
   "scripts": {
-    "scan": "node scripts/generate-facts.mjs"
+    "scan": "node scripts/cli.mjs scan",
+    "docs": "node scripts/cli.mjs docs",
+    "ask": "node scripts/cli.mjs ask"
   }
 }

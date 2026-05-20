@@ -23,17 +23,27 @@ Run:
 
 ```bash
 npm run scan
+npm run docs
 ```
 
-This refreshes the generated onboarding facts after code changes.
+This refreshes the generated onboarding facts after code changes and rebuilds the handbook-style docs.
 
-## 3. As the base for a later project skill
+## 3. As a local onboarding CLI
 
-The project now includes a first onboarding skill under `skills/frontend-onboarding/`.
+You can also use the local ask command:
+
+```bash
+npm run ask -- "登录后路由怎么生成"
+```
+
+This version of `ask` is a local, rule-based helper. It does not replace a full LLM runtime, but it gives a practical command-line entry for common onboarding questions.
+
+## 4. As the base for a later project skill
 
 Suggested runtime workflow:
 
 1. refresh facts with `npm run scan`,
+2. rebuild helper docs with `npm run docs`,
 2. open the target repo,
 3. ask questions using the example prompts from `docs/example-prompts.md`,
 4. extend the skill as the project evolves.
